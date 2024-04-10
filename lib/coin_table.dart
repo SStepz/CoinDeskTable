@@ -72,29 +72,26 @@ class _CoinTableState extends State<CoinTable> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'Rate',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    child: Text(
+                      'Rate',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'Description',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    child: Text(
+                      'Description',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'Rate Float',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    child: Text(
+                      'Rate Float',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -110,26 +107,29 @@ class _CoinTableState extends State<CoinTable> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
+                        child: Text(NumberFormat.compactSimpleCurrency(
+                                name: data['code'])
+                            .currencySymbol),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                            NumberFormat.compactSimpleCurrency(name: data['code'])
-                                .currencySymbol),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(data['rate']),
+                          data['rate'],
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(data['description']),
+                        child: Text(
+                          data['description'],
+                          textAlign: TextAlign.center,
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(data['rate_float'].toString()),
+                        child: Text(
+                          data['rate_float'].toString(),
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
@@ -147,26 +147,29 @@ class _CoinTableState extends State<CoinTable> {
               //         ),
               //         Padding(
               //           padding: const EdgeInsets.all(8.0),
+              //           child: Text(NumberFormat.compactSimpleCurrency(
+              //                   name: data['code'])
+              //               .currencySymbol),
+              //         ),
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
               //           child: Text(
-              //               NumberFormat.compactSimpleCurrency(name: data['code'])
-              //                   .currencySymbol),
-              //         ),
-              //         Padding(
-              //           padding: const EdgeInsets.all(8.0),
-              //           child: Center(
-              //             child: Text(data['rate']),
+              //             data['rate'],
+              //             textAlign: TextAlign.center,
               //           ),
               //         ),
               //         Padding(
               //           padding: const EdgeInsets.all(8.0),
-              //           child: Center(
-              //             child: Text(data['description']),
+              //           child: Text(
+              //             data['description'],
+              //             textAlign: TextAlign.center,
               //           ),
               //         ),
               //         Padding(
               //           padding: const EdgeInsets.all(8.0),
-              //           child: Center(
-              //             child: Text(data['rate_float'].toString()),
+              //           child: Text(
+              //             data['rate_float'].toString(),
+              //             textAlign: TextAlign.center,
               //           ),
               //         ),
               //       ],
