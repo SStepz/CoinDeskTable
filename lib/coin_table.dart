@@ -18,23 +18,12 @@ class CoinTable extends StatefulWidget {
 
 class _CoinTableState extends State<CoinTable> {
   Map<String, dynamic>? _coinData;
+  List<String>? _keyData;
 
   @override
   void initState() {
-    super.initState();
     _fetchCoinData();
-  }
-
-  void _fetchCoinData() async {
-    final response = await http
-        .get(Uri.parse('https://api.coindesk.com/v1/bpi/currentprice.json'));
-    if (response.statusCode == 200) {
-      setState(() {
-        _coinData = json.decode(response.body)['bpi'];
-      });
-    } else {
-      throw Exception('Failed to fetch coin data');
-    }
+    super.initState();
   }
 
   @override
@@ -56,50 +45,22 @@ class _CoinTableState extends State<CoinTable> {
                 child: Table(
                   border: TableBorder.all(),
                   children: [
-                    const TableRow(
-                      decoration: BoxDecoration(
+                    TableRow(
+                      decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 147, 223, 247),
                       ),
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Code',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                      children: _keyData!.map((key) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: allTextStyle(
+                            text: key.toUpperCase(),
+                            weight: FontWeight.bold,
+                            align: key == 'code' || key == 'symbol'
+                                ? TextAlign.start
+                                : TextAlign.center,
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Symbol',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Rate',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Description',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Rate Float',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
+                        );
+                      }).toList(),
                     ),
                     ..._coinData!.entries.map(
                       (entry) {
@@ -108,83 +69,71 @@ class _CoinTableState extends State<CoinTable> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(data['code']),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(NumberFormat.compactSimpleCurrency(
-                                      name: data['code'])
-                                  .currencySymbol),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                data['rate'],
-                                textAlign: TextAlign.center,
+                              child: allTextStyle(
+                                text: data['code'],
+                                align: TextAlign.start,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                data['description'],
-                                textAlign: TextAlign.center,
+                              child: allTextStyle(
+                                text: NumberFormat.compactSimpleCurrency(
+                                        name: data['code'])
+                                    .currencySymbol,
+                                align: TextAlign.start,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                data['rate_float'].toString(),
-                                textAlign: TextAlign.center,
+                              child: allTextStyle(
+                                text: data['rate'],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: allTextStyle(
+                                text: data['description'],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: allTextStyle(
+                                text: data['rate_float'].toString(),
                               ),
                             ),
                           ],
                         );
                       },
                     ),
-                    // ...coinData2.entries.map(
-                    //   (entry) {
-                    //     final data = entry.value;
-                    //     return TableRow(
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(data['code']),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(NumberFormat.compactSimpleCurrency(
-                    //                   name: data['code'])
-                    //               .currencySymbol),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(
-                    //             data['rate'],
-                    //             textAlign: TextAlign.center,
-                    //           ),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(
-                    //             data['description'],
-                    //             textAlign: TextAlign.center,
-                    //           ),
-                    //         ),
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(8.0),
-                    //           child: Text(
-                    //             data['rate_float'].toString(),
-                    //             textAlign: TextAlign.center,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
                   ],
                 ),
               ),
             ),
+    );
+  }
+
+  void _fetchCoinData() async {
+    final response = await http
+        .get(Uri.parse('https://api.coindesk.com/v1/bpi/currentprice.json'));
+    if (response.statusCode == 200) {
+      setState(() {
+        _coinData = json.decode(response.body)['bpi'];
+        _keyData = _coinData!.entries.first.value.keys.toList();
+      });
+    } else {
+      throw Exception('Failed to fetch coin data');
+    }
+  }
+
+  Widget allTextStyle({
+    required String text,
+    FontWeight? weight,
+    TextAlign? align,
+  }) {
+    return Text(
+      text,
+      style: TextStyle(fontWeight: weight ?? FontWeight.normal),
+      textAlign: align ?? TextAlign.center,
     );
   }
 }
